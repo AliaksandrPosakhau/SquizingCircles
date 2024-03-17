@@ -1,0 +1,13 @@
+C:\Users\ria_b\source\repos\SquizzingCircles\SquizzingCircles\bin\Debug\SquizzingCircles.exe.config
+C:\Users\ria_b\source\repos\SquizzingCircles\SquizzingCircles\bin\Debug\SquizzingCircles.exe
+C:\Users\ria_b\source\repos\SquizzingCircles\SquizzingCircles\bin\Debug\SquizzingCircles.pdb
+C:\Users\ria_b\source\repos\SquizzingCircles\SquizzingCircles\obj\Debug\SquizzingCircles.csproj.AssemblyReference.cache
+C:\Users\ria_b\source\repos\SquizzingCircles\SquizzingCircles\obj\Debug\SquizzingCircles.csproj.CoreCompileInputs.cache
+C:\Users\ria_b\source\repos\SquizzingCircles\SquizzingCircles\obj\Debug\SquizzingCircles.exe
+C:\Users\ria_b\source\repos\SquizzingCircles\SquizzingCircles\obj\Debug\SquizzingCircles.pdb
+C:\Users\ria_b\source\repos\SquizzingCircles\SquizzingCircles\bin\Debug\sfml-audio.dll
+C:\Users\ria_b\source\repos\SquizzingCircles\SquizzingCircles\bin\Debug\sfml-graphics.dll
+C:\Users\ria_b\source\repos\SquizzingCircles\SquizzingCircles\bin\Debug\sfml-learning.dll
+C:\Users\ria_b\source\repos\SquizzingCircles\SquizzingCircles\bin\Debug\sfml-system.dll
+C:\Users\ria_b\source\repos\SquizzingCircles\SquizzingCircles\bin\Debug\sfml-window.dll
+C:\Users\ria_b\source\repos\SquizzingCircles\SquizzingCircles\obj\Debug\SquizzingCircles.csproj.CopyComplete
