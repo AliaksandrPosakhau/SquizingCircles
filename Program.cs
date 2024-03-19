@@ -1,16 +1,20 @@
 ﻿using System;
-using System.Threading;
-using System.Windows.Input;
 using SFML.Graphics;
 using SFML.Learning;
+using SFML.System;
+using SFML.Window;
 
-     class Program :Game
+class Program :Game
     {
     static uint APPLICATION_WINDOW_WIDTH = 1400;
     static uint APPLICATION_WINDOW_HEIGHT = 900;
 
     static int INNER_CIRCLE_INITIAL_RADIUS = 10;
     static int OUTER_CIRCLE_INITIAL_RADIUS = 400;
+
+    static string startDrawSound = LoadSound("action.wav");
+    static string stopDrawSound = LoadSound("stopDraw.wav");
+    static string circlesCollisionSound = LoadSound("circlesCrash.wav");
 
     static int OUTER_CIRCLE_RADIUS = OUTER_CIRCLE_INITIAL_RADIUS;
     static int INNER_CIRCLE_RADIUS = INNER_CIRCLE_INITIAL_RADIUS;
@@ -21,16 +25,7 @@ using SFML.Learning;
     static int getInnerCircleRadius() {
         return INNER_CIRCLE_RADIUS;
     }
-
-    static void reportCircleParameters()
-    {
-        Console.WriteLine("Outer circle : " + getOuterCircleRadius());
-        Console.WriteLine("Inner circle : " + getInnerCircleRadius());
-    }
-
-    static int iterationCounter = 1;
-
-
+     
     static int drawOuterCircle(Color color)
     {
         SetFillColor(color);
@@ -65,80 +60,75 @@ using SFML.Learning;
         growInnerCircle();        
     }
 
-    static void processIteration()
-    {
-        Timer timer = new Timer(timerExec, null, 0, 1000);
-
-        while (ALLOW_DRAW)
-        {
-            if (Console.KeyAvailable)
-            {
-                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-
-                if (keyInfo.Key == ConsoleKey.Spacebar)
-                {
-                    ALLOW_DRAW = false;
-                    timer.Dispose();
-                    Console.WriteLine("ITERATION " + iterationCounter + " completed.");
-                    iterationCounter++;
-                }
-            }
-        } 
-    }
-
     static void growInnerCircle()
     {
         if(getInnerCircleRadius()>getOuterCircleRadius())
         {
             gameOver=true;
+            PlaySound(circlesCollisionSound);
         }
        drawInnerCircle();
        increaseInnerCircleRadius();
 
     }
-
-    static void setNextPhaseParameters() {
-        ClearWindow();
-        setOuterCircleRadius(getInnerCircleRadius());
-        setInnerCircleRadius(0);
+     static string formScoreString (int score)
+    {
+        return ("Current score: "+score.ToString());
     }
 
     static Boolean ALLOW_DRAW = false;
-    static Boolean gameOver = false;  
- 
+    static Boolean gameOver = false;
+    static Boolean spaceKeyHitAllowed = true;
+    static Boolean leftShiftKeyHitAllowed = false;
+    static int score = 0;
+
     static void Main(string[] args)
         {
         Console.WriteLine("Press Spacebar to start iteration..."); 
         InitWindow(APPLICATION_WINDOW_WIDTH, APPLICATION_WINDOW_HEIGHT, "SquizzingCircles 1.0");
         SetFont("comic.ttf");
         SetFillColor(255, 0, 255);
-        DrawText(300, 400, "Space - start iteration, LShift - stop iteration", 35);
+        DrawText(300, 400, "Space - start draw", 35);
 
         while (!gameOver)
         {
             DispatchEvents();
             DisplayWindow();
 
-            if (GetKey(SFML.Window.Keyboard.Key.Space) == true)
-            {               
-                Console.WriteLine("DRAW STARTED");                
-                ALLOW_DRAW=true;                    
+            if (spaceKeyHitAllowed)
+            {
+                if (GetKey(SFML.Window.Keyboard.Key.Space) == true)
+                {
+                    Console.WriteLine("DRAW STARTED");
+                    ALLOW_DRAW = true;
+                    PlaySound(startDrawSound);
+                    SetFont("comic.ttf");
+                    SetFillColor(255, 0, 255);
+                    DrawText(0, 8, "Left shift - stop draw", 35);
+                    spaceKeyHitAllowed = false;
+                    leftShiftKeyHitAllowed = true;
+                }
             }
 
-           
-            if (GetKey(SFML.Window.Keyboard.Key.LShift) == true)
-            {                
-                Console.WriteLine("DRAW FINISHED");
-                ALLOW_DRAW = false;
+            if (leftShiftKeyHitAllowed) {
+                if (GetKey(SFML.Window.Keyboard.Key.LShift) == true)
+                {
+                    Console.WriteLine("DRAW FINISHED");
+                    PlaySound(stopDrawSound);
+                    ALLOW_DRAW = false;
+                    spaceKeyHitAllowed = true;
+                    leftShiftKeyHitAllowed = false;
 
-                Console.WriteLine("Outer circle: " + getOuterCircleRadius());
-                Console.WriteLine("Inner circle: " + getInnerCircleRadius());
+                    Console.WriteLine("Outer circle: " + getOuterCircleRadius());
+                    Console.WriteLine("Inner circle: " + getInnerCircleRadius());
 
-                ClearWindow();
-                drawOuterCircle(Color.Black);
-                setOuterCircleRadius(getInnerCircleRadius());
-                setInnerCircleRadius(0);              
-                 
+                    ClearWindow();
+                    drawOuterCircle(Color.Black);
+                    score += (getOuterCircleRadius() - getInnerCircleRadius());
+                    Console.WriteLine("SCORE : "+score);
+                    setOuterCircleRadius(getInnerCircleRadius());
+                    setInnerCircleRadius(0);
+                }
             }
 
             if(ALLOW_DRAW)
@@ -148,8 +138,7 @@ using SFML.Learning;
                 growInnerCircle();
             }
             
-            Delay(80);
-         
+            Delay(80);       
             
         }
         
@@ -157,6 +146,7 @@ using SFML.Learning;
         SetFont("comic.ttf");
         SetFillColor(255, 0, 0);
         DrawText(500, 400, "GAME OVER", 65);
+        DrawText(500, 600, formScoreString(score), 65);
         // PlaySound(endGameSuccess); 
         DisplayWindow();
         Delay(1000);
