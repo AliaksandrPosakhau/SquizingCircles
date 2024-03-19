@@ -99,7 +99,7 @@ class Program :Game
         InitWindow(APPLICATION_WINDOW_WIDTH, APPLICATION_WINDOW_HEIGHT, "SquizzingCircles 1.0");
         SetFont("comic.ttf");
         SetFillColor(255, 0, 255);
-        DrawText(300, 400, "Space - start draw", 35);
+        DrawText(300, 400, "Space - start draw, Left Shift - Stop draw", 35);
 
          
             while (!gameOver)
