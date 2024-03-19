@@ -116,7 +116,7 @@ class Program :Game
                         PlaySound(startDrawSound);
                         SetFont("comic.ttf");
                         SetFillColor(255, 0, 255);
-                        DrawText(0, 8, "Left shift - stop draw", 35);
+                        DrawText(0, 8, "Left shift - stop draw", 35);                   
                         spaceKeyHitAllowed = false;
                         leftShiftKeyHitAllowed = true;
                     }
@@ -137,6 +137,8 @@ class Program :Game
 
                         ClearWindow();
                         drawOuterCircle(Color.Black);
+                        drawOuterCircle(Color.White);
+                        drawInnerCircle();
                         currentScore += (getOuterCircleRadius() - getInnerCircleRadius());
                         increaseScore(currentScore);
                         Console.WriteLine("CURRENT SCORE : " + currentScore);
@@ -150,19 +152,15 @@ class Program :Game
                 {
                     ClearWindow();
                     drawOuterCircle(Color.White);
-                    growInnerCircle();
-                }
-
+                    growInnerCircle();                    
+            }
                 Delay(80);
-
             }           
-
             ClearWindow();
             SetFont("comic.ttf");
             SetFillColor(255, 0, 0);
             DrawText(500, 400, "GAME OVER", 65);
-            DrawText(500, 600, formScoreString(getScore()), 65);
-            // PlaySound(endGameSuccess); 
+            DrawText(500, 600, formScoreString(getScore()), 65);             
             DisplayWindow();
             Delay(1000);         
     }
