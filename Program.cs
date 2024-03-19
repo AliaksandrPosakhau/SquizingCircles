@@ -154,7 +154,7 @@ class Program :Game
                     drawOuterCircle(Color.White);
                     growInnerCircle();                    
             }
-                Delay(80);
+                //Delay(80);
             }           
             ClearWindow();
             SetFont("comic.ttf");
