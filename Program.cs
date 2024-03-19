@@ -78,9 +78,20 @@ class Program :Game
 
     static Boolean ALLOW_DRAW = false;
     static Boolean gameOver = false;
+    static Boolean quitGame = false;
     static Boolean spaceKeyHitAllowed = true;
     static Boolean leftShiftKeyHitAllowed = false;
-    static int score = 0;
+    static int totalScore = 0;
+    static int currentScore = 0;
+
+    static void increaseScore(int scoreAddition) {
+        totalScore += scoreAddition;
+    }
+
+    static int getScore() {
+    return totalScore;
+    }
+
 
     static void Main(string[] args)
         {
@@ -90,66 +101,70 @@ class Program :Game
         SetFillColor(255, 0, 255);
         DrawText(300, 400, "Space - start draw", 35);
 
-        while (!gameOver)
-        {
-            DispatchEvents();
-            DisplayWindow();
-
-            if (spaceKeyHitAllowed)
+         
+            while (!gameOver)
             {
-                if (GetKey(SFML.Window.Keyboard.Key.Space) == true)
+                DispatchEvents();
+                DisplayWindow();
+
+                if (spaceKeyHitAllowed)
                 {
-                    Console.WriteLine("DRAW STARTED");
-                    ALLOW_DRAW = true;
-                    PlaySound(startDrawSound);
-                    SetFont("comic.ttf");
-                    SetFillColor(255, 0, 255);
-                    DrawText(0, 8, "Left shift - stop draw", 35);
-                    spaceKeyHitAllowed = false;
-                    leftShiftKeyHitAllowed = true;
+                    if (GetKey(SFML.Window.Keyboard.Key.Space) == true)
+                    {
+                        Console.WriteLine("DRAW STARTED");
+                        ALLOW_DRAW = true;
+                        PlaySound(startDrawSound);
+                        SetFont("comic.ttf");
+                        SetFillColor(255, 0, 255);
+                        DrawText(0, 8, "Left shift - stop draw", 35);
+                        spaceKeyHitAllowed = false;
+                        leftShiftKeyHitAllowed = true;
+                    }
                 }
-            }
 
-            if (leftShiftKeyHitAllowed) {
-                if (GetKey(SFML.Window.Keyboard.Key.LShift) == true)
+                if (leftShiftKeyHitAllowed)
                 {
-                    Console.WriteLine("DRAW FINISHED");
-                    PlaySound(stopDrawSound);
-                    ALLOW_DRAW = false;
-                    spaceKeyHitAllowed = true;
-                    leftShiftKeyHitAllowed = false;
+                    if (GetKey(SFML.Window.Keyboard.Key.LShift) == true)
+                    {
+                        Console.WriteLine("DRAW FINISHED");
+                        PlaySound(stopDrawSound);
+                        ALLOW_DRAW = false;
+                        spaceKeyHitAllowed = true;
+                        leftShiftKeyHitAllowed = false;
 
-                    Console.WriteLine("Outer circle: " + getOuterCircleRadius());
-                    Console.WriteLine("Inner circle: " + getInnerCircleRadius());
+                        Console.WriteLine("Outer circle: " + getOuterCircleRadius());
+                        Console.WriteLine("Inner circle: " + getInnerCircleRadius());
 
+                        ClearWindow();
+                        drawOuterCircle(Color.Black);
+                        currentScore += (getOuterCircleRadius() - getInnerCircleRadius());
+                        increaseScore(currentScore);
+                        Console.WriteLine("CURRENT SCORE : " + currentScore);
+                        Console.WriteLine("TOTAL SCORE : " + getScore());
+                        setOuterCircleRadius(getInnerCircleRadius());
+                        setInnerCircleRadius(0);
+                    }
+                }
+
+                if (ALLOW_DRAW)
+                {
                     ClearWindow();
-                    drawOuterCircle(Color.Black);
-                    score += (getOuterCircleRadius() - getInnerCircleRadius());
-                    Console.WriteLine("SCORE : "+score);
-                    setOuterCircleRadius(getInnerCircleRadius());
-                    setInnerCircleRadius(0);
+                    drawOuterCircle(Color.White);
+                    growInnerCircle();
                 }
-            }
 
-            if(ALLOW_DRAW)
-            {
-                ClearWindow();
-                drawOuterCircle(Color.White);
-                growInnerCircle();
-            }
-            
-            Delay(80);       
-            
-        }
-        
-        ClearWindow();
-        SetFont("comic.ttf");
-        SetFillColor(255, 0, 0);
-        DrawText(500, 400, "GAME OVER", 65);
-        DrawText(500, 600, formScoreString(score), 65);
-        // PlaySound(endGameSuccess); 
-        DisplayWindow();
-        Delay(1000);
+                Delay(80);
+
+            }           
+
+            ClearWindow();
+            SetFont("comic.ttf");
+            SetFillColor(255, 0, 0);
+            DrawText(500, 400, "GAME OVER", 65);
+            DrawText(500, 600, formScoreString(getScore()), 65);
+            // PlaySound(endGameSuccess); 
+            DisplayWindow();
+            Delay(1000);         
     }
 }
  
